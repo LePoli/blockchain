@@ -3,11 +3,7 @@ const proof = require('../services/proof');
 
 const getBlockchain = (req, res, next) => {
   try {
-    res.status(200).json({
-      chain: blockchain.chain,
-      length: blockchain.chain.length,
-      currentTransactions: blockchain.currentTransactions,
-    });
+    res.status(200).json(blockchain);
   } catch (e) {
     next(e);
   }
@@ -17,6 +13,39 @@ const createTransaction = (req, res, next) => {
   try {
     const tx = blockchain.newTransaction(req.body.sender, req.body.recipient, req.body.amount);
     res.status(200).json(tx);
+  } catch (e) {
+    next(e);
+  }
+};
+
+const registerNode = (req, res, next) => {
+  try {
+    const node = blockchain.registerNode(req.body.address);
+    if (node) {
+      res.status(200).json(node);
+    } else {
+      res.status(302).json({ message: 'Node already registered' });
+    }
+  } catch (e) {
+    next(e);
+  }
+};
+
+const resolveConflict = (req, res, next) => {
+  try {
+    blockchain.resolveConflicts().then((replaced) => {
+      if (replaced) {
+        res.status(200).json({
+          message: 'Our chain was replaced',
+          newChain: blockchain.chain
+        });
+      } else {
+        res.status(200).json({
+          message: 'Our chain is on sync',
+          newChain: blockchain.chain
+        });
+      }
+    }).catch(next);
   } catch (e) {
     next(e);
   }
@@ -60,5 +89,7 @@ module.exports = {
   getBlockchain,
   createTransaction,
   getLastBlock,
-  mineBlock
+  mineBlock,
+  registerNode,
+  resolveConflict
 };
