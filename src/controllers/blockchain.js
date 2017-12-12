@@ -3,12 +3,12 @@ const proof = require('../services/proof');
 
 const getBlockchain = (req, res, next) => {
   try {
-    res.status(200).json({ 
+    res.status(200).json({
       chain: blockchain.chain,
       length: blockchain.chain.length,
       currentTransactions: blockchain.currentTransactions,
     });
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 };
@@ -17,7 +17,7 @@ const createTransaction = (req, res, next) => {
   try {
     const tx = blockchain.newTransaction(req.body.sender, req.body.recipient, req.body.amount);
     res.status(200).json(tx);
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 };
@@ -25,7 +25,7 @@ const createTransaction = (req, res, next) => {
 const getLastBlock = (req, res, next) => {
   try {
     res.status(200).json(blockchain.lastBlock());
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 };
@@ -51,7 +51,7 @@ const mineBlock = (req, res, next) => {
     } else {
       res.status(500).json({ message: 'Error mining block' });
     }
-  } catch(e) {
+  } catch (e) {
     next(e);
   }
 };
