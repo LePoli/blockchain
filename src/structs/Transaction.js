@@ -1,5 +1,3 @@
-const crypto = require('crypto');
-
 class Transaction {
   constructor(sender, recipient, amount) {
     this._sender = sender;

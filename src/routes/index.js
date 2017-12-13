@@ -4,6 +4,9 @@ const router = express.Router();
 
 const blockchainCtrl = require('../controllers/blockchain');
 
+/**
+ * Get blockchain details
+ */
 router.get('/', (req, res, next) => {
   blockchainCtrl.getBlockchain(req, res, next);
 });
@@ -20,7 +23,7 @@ router.post('/transactions', (req, res, next) => {
 });
 
 /**
- * Mine
+ * Mine a new block with current transaction
  */
 router.post('/mine', (req, res, next) => {
   if (req.body.recipient) {
@@ -37,7 +40,9 @@ router.get('/blocks/last', (req, res, next) => {
   blockchainCtrl.getLastBlock(req, res, next);
 });
 
-
+/**
+ * Register a new node
+ */
 router.post('/nodes', (req, res, next) => {
   if (req.body.address) {
     blockchainCtrl.registerNode(req, res, next);
@@ -46,6 +51,9 @@ router.post('/nodes', (req, res, next) => {
   }
 });
 
+/**
+ * Sync blockchain chain
+ */
 router.get('/resolve', (req, res, next) => {
   blockchainCtrl.resolveConflict(req, res, next);
 });
