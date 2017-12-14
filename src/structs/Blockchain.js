@@ -32,6 +32,10 @@ class Blockchain {
     return null;
   }
 
+  /**
+   * Registers a node list
+   * @param {Array} addressList nodes list
+   */
   registerNodes(addressList) {
     addressList.forEach((address) => {
       this.registerNode(address);
@@ -82,8 +86,6 @@ class Blockchain {
             if (response && response.statusCode === 200 && JSON.parse(body).chain) {
               const remoteBlockchain = JSON.parse(body);
               const currentNodeChain = remoteBlockchain.chain;
-              // register all other node neigbours
-              this.registerNodes(remoteBlockchain.nodes);
               if (currentNodeChain.length > maxLength && this.validChain(currentNodeChain)) {
                 maxLength = currentNodeChain.length;
                 newChain = currentNodeChain;
@@ -108,9 +110,11 @@ class Blockchain {
    * @param {Block} block Block to calculate hash to
    */
   hash(block) { // eslint-disable-line class-methods-use-this
-    return crypto.createHash('sha256')
+    const _hash = crypto.createHash('sha256')
       .update(`${String(block.index)}.${String(block.previousHash)}.${JSON.stringify(block.transactions)}.${String(block.timestamp)}`)
       .digest('hex');
+    console.log('hash', _hash);
+    return _hash;
   }
 
   /**
@@ -132,6 +136,7 @@ class Blockchain {
       prospectGenesisBlock.transactions,
       prospectGenesisBlock.timestamp
     );
+    console.log('genesisBlock', genesisBlock);
     return genesisBlock;
   }
 

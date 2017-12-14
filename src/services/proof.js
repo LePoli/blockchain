@@ -7,6 +7,7 @@ const proofOfWork = (hash, prefix) => {
     const proof = id.toString(16);
     str = crypto.createHash('sha256').update(hash).update(proof).digest('hex');
     if (str.substring(0, prefix.length) === prefix) {
+      console.log('intento #', id, str);
       return proof;
     }
     id += 1;
