@@ -32,6 +32,12 @@ class Blockchain {
     return null;
   }
 
+  registerNodes(addressList) {
+    addressList.forEach((address) => {
+      this.registerNode(address);
+    });
+  }
+
   /**
    * Checks if a chain of blocks is valid
    * @param {Array} neighbourChain Neighbour array of blocks
@@ -76,6 +82,8 @@ class Blockchain {
             if (response && response.statusCode === 200 && JSON.parse(body).chain) {
               const remoteBlockchain = JSON.parse(body);
               const currentNodeChain = remoteBlockchain.chain;
+              // register all other node neigbours
+              this.registerNodes(remoteBlockchain.nodes);
               if (currentNodeChain.length > maxLength && this.validChain(currentNodeChain)) {
                 maxLength = currentNodeChain.length;
                 newChain = currentNodeChain;
