@@ -11,7 +11,7 @@ class Blockchain {
    * @param {Number} fee Mining fee
    */
   constructor(prefix, fee) {
-    this.prefix = prefix || '00000';
+    this.prefix = prefix || '0000';
     this.fee = fee || 1;
     this.chain = [];
     this.currentTransactions = [];
